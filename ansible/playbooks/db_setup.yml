@@ -1,0 +1,20 @@
+- name: Configure Database Servers
+  hosts: db_servers
+  become: true
+  tasks:
+    - name: Install MySQL and MongoDB
+      package:
+        name:
+          - mysql-server
+          - mongodb
+        state: present
+
+    - name: Start and enable databases
+      service:
+        name: "{{ item }}"
+        state: started
+        enabled: yes
+      loop:
+        - mysql
+        - mongod
+

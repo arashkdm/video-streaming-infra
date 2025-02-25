@@ -1,0 +1,21 @@
+- name: Configure HAProxy Load Balancer
+  hosts: load_balancer
+  become: true
+  tasks:
+    - name: Install HAProxy
+      package:
+        name: haproxy
+        state: present
+
+    - name: Configure HAProxy
+      template:
+        src: ../roles/lb/templates/haproxy.cfg.j2
+        dest: /etc/haproxy/haproxy.cfg
+      notify: Restart HAProxy
+
+  handlers:
+    - name: Restart HAProxy
+      service:
+        name: haproxy
+        state: restarted
+
